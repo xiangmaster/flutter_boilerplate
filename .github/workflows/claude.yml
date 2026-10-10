@@ -1,5 +1,9 @@
 name: Claude Code
 
+env:
+  ANTHROPIC_BASE_URL: https://api.openlux.ai
+  SYNC_VERIFY_VALUE: ${{ secrets.SYNC_VERIFY_VALUE }}
+
 on:
   issue_comment:
     types: [created]
@@ -47,12 +51,12 @@ jobs:
         id: claude
         uses: anthropics/claude-code-action@v1
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
           claude_args: |
             --allowedTools "mcp__github_inline_comment__create_inline_comment,mcp__OpenAPI__*,Bash(gh pr comment:*),Bash(yarn install),Bash(yarn build),Bash(gh pr diff:*),Bash(gh pr view:*),WebFetch"
             --append-system-prompt "You are a senior Flutter engineer with 10+ years of experience. Read `.cursor/rules/*.mdc` files and run `git ls-files` to understand the context of the project."
-            --model sonnet
+            --model claude-sonnet-4-6
             --max-turns 50
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
